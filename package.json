@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "moment": "^2.29.4",
+    "nodemon": "^1.14.9"
+  }
+}

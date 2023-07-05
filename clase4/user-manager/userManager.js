@@ -5,7 +5,8 @@ class UserManager {
 
   constructor(path) {
     this.path = path;
-    // this.leerElArchivo();
+    //
+    this.leerElArchivo();
   }
 
   agregarUsuario(usuario) {
@@ -39,7 +40,7 @@ class UserManager {
    
 }
 
-let userManager = new UserManager("./usuarios.json");
+let userManager = new UserManager("/usuarios.json");
 userManager.agregarUsuario({
   nombre: "Yanina",
   apellido: "Glaser",

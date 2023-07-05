@@ -40,20 +40,20 @@ objetos.forEach((objeto) => {
   });
 });
 
-// Mostrar la nueva lista por consola
-//console.log(listaProductos);
+//Mostrar la nueva lista por consola
+console.log(listaProductos);
   
 
+//total con reduce
 
+let totalR = objetos.reduce((accumulator, objeto) =>
+  accumulator + Object.values(objeto).reduce((acc, value) => acc + value, 0), 0);
 
-// let total = objetos.reduce((accumulator, objeto) =>
-//   accumulator + Object.values(objeto).reduce((acc, value) => acc + value, 0), 0);
-
-// console.log(total);
+console.log(totalR);
  
 
 
-
+//total con forEach
 let total=0;
 objetos.forEach((dato) => {
   let tempotalArray = Object.values(dato);
