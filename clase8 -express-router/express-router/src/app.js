@@ -5,7 +5,7 @@ import petRouter from "./router/pet.router.js";
 
 
 const app=express();
-const PORT=3002;
+const PORT=8082;
 
 
 app.use(express.json());
