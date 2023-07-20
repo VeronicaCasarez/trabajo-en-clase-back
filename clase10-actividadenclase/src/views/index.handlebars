@@ -1,0 +1,10 @@
+<h1>Chat App</h1>
+<div>
+  <input type="text" id="messageInput" />
+  <button onclick="sendMessage()">Enviar</button>
+</div>
+<div id="messagesDiv">
+  {{#each messages}}
+    <p>{{socketid}}: {{mensaje}}</p>
+  {{/each}}
+</div>
