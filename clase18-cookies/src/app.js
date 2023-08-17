@@ -2,10 +2,18 @@ import express  from "express";
 import { engine } from "express-handlebars";
 import { __filename, __dirname } from './utils.js';
 import cookieParser from 'cookie-parser';
+import session from "express-session";
 
 const app=express();
-
+//********cookies */
 app.use(cookieParser("C0d3rS3cr3t"));
+
+//********session */
+app.use(session({
+    secret:"codersecret",
+    resave:true,
+    saveUninitialized:true,
+}))
 
 
 // Configurar el motor de plantillas Handlebars
@@ -20,13 +28,27 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
 //res seteamos cookies
 //req obtenemos cookies
 //res eliminamos cookies
 
+//middleware de autenticacion
+function auth(req, res, next) {
+    if (req.session?.user === "pepe" && req.session?.admin) {
+      return next();
+    }
+    return res.status(401).json("error de autenticacion");
+  }
+//****rutas de cookies***** */
 //renderiza cookie.handlebars
 app.get("/cookies", (req,res)=>{
     res.render('cookie',{})
+})
+
+//renderiza session
+app.get("/", (req,res)=>{
+    res.render('login',{})
 })
 
 //crea la cookie y recibe por parametro los datos
@@ -55,5 +77,49 @@ app.get ("/getCookies", (req,res)=>{
 app.get("/deleteCookie", (req,res)=>{
     res.clearCookie('coderCookie').send('Cookie  eliminada')
 })
+
+//****rutas de sessions***** */
+//levantar la sesion en el endpoint
+app.get('/session', (req,res)=>{
+    if (req.session.counter){
+        req.session.counter++
+        res.send(`Se a visitado el sitio ${req.session.counter} veces` )
+    }else{
+        req.session.counter=1
+        res.send('Bienvenido, es su primera vez en este sitio')
+    }
+});
+
+//eliminar datos de session
+app.get('/logout', (req,res)=>{
+    req.session.destroy ((err) =>{
+        if (!err){
+            res.send('logout ok!')
+        }else{
+            res.send({status:'   al cerrar session', body:err})} 
+    })
+
+})
+
+//login con session
+app.post("/login", (req, res) => {
+    console.log(req.body);
+    const { username, password } = req.body;
+    if (username !== "pepe" || password !== "pepepass")
+      return res.status(401).json({
+        respuesta: "error",
+      });
+  
+    req.session.user = username;
+    req.session.admin = true;
+    res.status(200).json({
+      respuesta: "ok",
+    });
+  });
+
+  //aplicacion del midlware de autenticacion
+  app.get("/privado", auth, (req, res) => {
+    res.render("private", {});
+  });
 
 app.listen(8080, ()=>console.log("Servidor escuchando en el puerto 8080"))
