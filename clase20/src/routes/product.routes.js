@@ -21,6 +21,8 @@ router.get("/", isLoggedIn, async (req, res) => {
   
   try {
     let response = await ProductModel.find().lean();   
+    let user= req.session.user;
+    console.log(user)
     
      // Resolución de los filtros por categoría y disponibilidad
     // if (filter === "category") {
@@ -48,7 +50,7 @@ router.get("/", isLoggedIn, async (req, res) => {
  
     res.render('product', {
       products: paginatedResponse,
- 
+      user:user,
       pagination: {
         status: 'success',
         totalPages: totalPages,

@@ -9,9 +9,12 @@ import SignupRoute from "./routes/signup.routes.js";
 import SessionRoute from "./routes/session.routes.js";
 import ProductRouter from "./routes/product.routes.js";
 import LogoutRouter from "./routes/logout.routes.js";
-import PrivateRouter from "./routes/private.routes.js"
-
+import PrivateRouter from "./routes/private.routes.js";
+import ForgotRoute from "./routes/forgot.routes.js";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 import * as dotenv from "dotenv";
+
 
 import {__dirname} from "./utils.js";
 
@@ -49,6 +52,11 @@ app.use(
   })
 );
 
+//inicializar passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session())
+
 //configuracion de mongoose
 const environment = async () => {
   try {
@@ -69,7 +77,8 @@ app.use("/signup", SignupRoute);
 app.use("/api/session/", SessionRoute);
 app.use("/api/products",ProductRouter)
 app.use("/logout",LogoutRouter);
-app.use("/private",PrivateRouter)
+app.use("/private",PrivateRouter);
+app.use("/forgot", ForgotRoute);
 
 
 const server = app.listen(PORT, () => {
